@@ -70,7 +70,7 @@ export function Hero() {
       <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
         <motion.img
           src="/profile/rohit-3d-avatar.png"
-          alt=""
+          alt="Rohit Kumar Jaiswal — Full-Stack Developer"
           loading="eager"
           decoding="async"
           animate={reducedMotion ? {} : { scale: [1, 1.018, 1] }}
@@ -160,6 +160,11 @@ export function Hero() {
             <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
               <a
                 href="#projects"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById("projects");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="group inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs sm:text-sm font-semibold text-[var(--color-accent-ink)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_20px_rgba(226,163,67,0.35)] active:scale-95"
               >
                 View My Work

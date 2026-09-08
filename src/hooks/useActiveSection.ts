@@ -1,32 +1,16 @@
 import { useEffect, useState } from "react";
 
-function parseHashToSectionId(hash: string): string {
-  const clean = hash.replace(/^#\/?/, "").toLowerCase();
-  if (!clean || clean === "home") return "home";
-  if (clean === "capabilities") return "what-i-build";
-  return clean;
-}
-
 /**
  * Observes given section ids and returns whichever is currently active
- * based on hash route, scroll position, and section boundaries.
+ * based on scroll position and section boundaries.
  */
 export function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState<string>(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      const fromHash = parseHashToSectionId(window.location.hash);
-      if (ids.includes(fromHash)) return fromHash;
-    }
-    return ids[0] ?? "home";
-  });
+  const [active, setActive] = useState<string>(ids[0] ?? "home");
 
   useEffect(() => {
-    // If a hash is present on mount/refresh, initialize active section from hash
-    if (window.location.hash) {
-      const fromHash = parseHashToSectionId(window.location.hash);
-      if (ids.includes(fromHash)) {
-        setActive(fromHash);
-      }
+    // Enforce active state to home on initial page load / refresh when at top
+    if (window.scrollY <= 80) {
+      setActive(ids[0] ?? "home");
     }
 
     const handleScroll = () => {
@@ -64,21 +48,12 @@ export function useActiveSection(ids: string[]) {
       setActive(currentSection);
     };
 
-    const handleHashChange = () => {
-      const fromHash = parseHashToSectionId(window.location.hash);
-      if (ids.includes(fromHash)) {
-        setActive(fromHash);
-      }
-    };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll, { passive: true });
-    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
-      window.removeEventListener("hashchange", handleHashChange);
     };
   }, [ids]);
 

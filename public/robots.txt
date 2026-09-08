@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rohitkumarjaiswal.dev/sitemap.xml
+Sitemap: https://rohitkumarjaiswal.in/sitemap.xml

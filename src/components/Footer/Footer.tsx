@@ -35,6 +35,16 @@ export function Footer() {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const targetId = link.href.replace("#", "");
+                  if (targetId === "home") {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    const el = document.getElementById(targetId);
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
                 className="group relative inline-block text-xs font-medium text-[var(--color-ink-muted)] transition-colors duration-200 hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)]"
               >
                 {link.label}

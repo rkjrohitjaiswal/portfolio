@@ -21,19 +21,11 @@ function App() {
       window.history.scrollRestoration = "manual";
     }
 
-    // Always reset scroll to top on initial page load unless an explicit section hash is provided
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
-    } else {
-      const cleanHash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
-      const targetId = cleanHash === "capabilities" ? "what-i-build" : cleanHash;
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView();
-      } else {
-        window.scrollTo(0, 0);
-      }
+    // Always reset URL hash to clean root and scroll to top on full page load / refresh
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (
