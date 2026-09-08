@@ -1,13 +1,34 @@
 import { useEffect, useState } from "react";
 
+function parseHashToSectionId(hash: string): string {
+  const clean = hash.replace(/^#\/?/, "").toLowerCase();
+  if (!clean || clean === "home") return "home";
+  if (clean === "capabilities") return "what-i-build";
+  return clean;
+}
+
 /**
  * Observes given section ids and returns whichever is currently active
- * based on scroll position and section boundaries.
+ * based on hash route, scroll position, and section boundaries.
  */
 export function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState<string>(ids[0] ?? "home");
+  const [active, setActive] = useState<string>(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const fromHash = parseHashToSectionId(window.location.hash);
+      if (ids.includes(fromHash)) return fromHash;
+    }
+    return ids[0] ?? "home";
+  });
 
   useEffect(() => {
+    // If a hash is present on mount/refresh, initialize active section from hash
+    if (window.location.hash) {
+      const fromHash = parseHashToSectionId(window.location.hash);
+      if (ids.includes(fromHash)) {
+        setActive(fromHash);
+      }
+    }
+
     const handleScroll = () => {
       const scrollPos = window.scrollY;
 
@@ -26,15 +47,15 @@ export function useActiveSection(ids: string[]) {
         }
       }
 
-      // 3. Determine active section based on section top offset
-      const navOffset = 160;
+      // 3. Viewport-relative section detection (immune to dynamic image/layout shifts)
+      const threshold = 240; // px offset from viewport top (matches scroll-mt alignment)
       let currentSection = ids[0] ?? "home";
 
       for (const id of ids) {
         const el = document.getElementById(id);
         if (el) {
-          const top = el.offsetTop - navOffset;
-          if (scrollPos >= top) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= threshold) {
             currentSection = id;
           }
         }
@@ -43,15 +64,21 @@ export function useActiveSection(ids: string[]) {
       setActive(currentSection);
     };
 
-    // Run immediately on mount
-    handleScroll();
+    const handleHashChange = () => {
+      const fromHash = parseHashToSectionId(window.location.hash);
+      if (ids.includes(fromHash)) {
+        setActive(fromHash);
+      }
+    };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll, { passive: true });
+    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("hashchange", handleHashChange);
     };
   }, [ids]);
 

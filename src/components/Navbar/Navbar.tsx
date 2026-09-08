@@ -27,10 +27,12 @@ export function Navbar() {
     const targetId = href.replace("#", "");
     if (targetId === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      window.history.pushState(null, "", "#home");
     } else {
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", href);
       }
     }
   };

@@ -25,7 +25,8 @@ function App() {
     if (!window.location.hash) {
       window.scrollTo(0, 0);
     } else {
-      const targetId = window.location.hash.replace("#", "");
+      const cleanHash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
+      const targetId = cleanHash === "capabilities" ? "what-i-build" : cleanHash;
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView();
