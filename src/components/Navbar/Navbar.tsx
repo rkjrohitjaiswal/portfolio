@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { profile } from "@/data/profile";
 import { useScrolled } from "@/hooks/useScrolled";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/utils";
@@ -52,12 +51,16 @@ export function Navbar() {
             e.preventDefault();
             handleNavigate("#home");
           }}
-          className="group flex items-center gap-1 font-display text-lg font-semibold tracking-tight text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+          className="group flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
+          aria-label="Rohit Kumar Jaiswal — Home"
         >
-          <span>{profile.initials}</span>
-          <span className="text-[var(--color-accent)] transition-transform duration-300 group-hover:scale-125">
-            .
-          </span>
+          <img
+            src="/logo/rkj-logo.png"
+            alt="RKJ — Rohit Kumar Jaiswal"
+            className="h-[32px] md:h-[36px] w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            width={62}
+            height={36}
+          />
         </a>
 
         {/* Desktop nav with Framer Motion sliding active indicator */}
