@@ -42,7 +42,7 @@ export const projects: Project[] = [
       "An intelligent content creation suite designed to generate, schedule, and automate social media workflows through custom AI prompt pipelines and workflow automation.",
     technologies: ["React", "Node.js", "Gemini API", "n8n Automation"],
     image: "/projects/ai-social-media-studio.png",
-    liveUrl: null,
+    liveUrl: "https://ai.socialmediastudio.rohitkumarjaiswal.in/",
     githubUrl: "https://github.com/rkjrohitjaiswal/Social-Media-Studio",
     featured: true,
   },
